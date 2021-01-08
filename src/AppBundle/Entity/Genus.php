@@ -24,21 +24,21 @@ class Genus
     private $name;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
      */
     private $subFamily;
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer",  nullable=true)
      */
     private $speciesCount;
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string",  nullable=true)
      */
     private $funFact;
 
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string",  nullable=true)
      */
     private  $status;
 

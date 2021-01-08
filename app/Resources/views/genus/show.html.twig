@@ -1,12 +1,52 @@
 {% extends 'base.html.twig' %}
 
-{%block title %} Genus {{ name }} {% endblock %}
 {% block body %}
-<h1>the genus {{ name }}</h1>
- 
-<ul>
- {% for note in notes %}
- <li>{{ note }}</li>
- {% endfor %}
-</ul>
+    <h1>Genus</h1>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ genus.id }}</td>
+            </tr>
+            <tr>
+                <th>Name</th>
+                <td>{{ genus.name }}</td>
+            </tr>
+            <tr>
+                <th>Subfamily</th>
+                <td>{{ genus.subFamily }}</td>
+            </tr>
+            <tr>
+                <th>Speciescount</th>
+                <td>{{ genus.speciesCount }}</td>
+            </tr>
+            <tr>
+                <th>Funfact</th>
+                <td>{{ genus.funFact }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ genus.status }}</td>
+            </tr>
+            <tr>
+                <th>Migration</th>
+                <td>{{ genus.migration }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('genus_index') }}">Back to the list</a>
+        </li>
+        <li>
+            <a href="{{ path('genus_edit', { 'id': genus.id }) }}">Edit</a>
+        </li>
+        <li>
+            {{ form_start(delete_form) }}
+                <input type="submit" value="Delete">
+            {{ form_end(delete_form) }}
+        </li>
+    </ul>
 {% endblock %}

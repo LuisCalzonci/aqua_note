@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+<head>
+    <meta charset="UTF-8" />
+    <title>{% block title %}imdex!{% endblock %}</title>
+    {% block stylesheets %}{% endblock %}
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+{% endblock head %}
+{% block body %}
+    <h1>Genera list</h1>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Subfamily</th>
+                <th>Speciescount</th>
+                <th>Funfact</th>
+                <th>Status</th>
+                <th>Migration</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for genus in genera %}
+            <tr>
+                <td><a href="{{ path('genus_show', { 'id': genus.id }) }}">{{ genus.id }}</a></td>
+                <td>{{ genus.name }}</td>
+                <td>{{ genus.subFamily }}</td>
+                <td>{{ genus.speciesCount }}</td>
+                <td>{{ genus.funFact }}</td>
+                <td>{{ genus.status }}</td>
+                <td>{{ genus.migration }}</td>
+                <td>
+                    <ul>
+                        <li>
+                            <a href="{{ path('genus_show', { 'id': genus.id }) }}">show</a>
+                        </li>
+                        <li>
+                            <a href="{{ path('genus_edit', { 'id': genus.id }) }}">edit</a>
+                        </li>
+                    </ul>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <ul>
+        <li>
+            <a href="{{ path('genus_new') }}">Create a new genus</a>
+        </li>
+    </ul>
+{% endblock %}

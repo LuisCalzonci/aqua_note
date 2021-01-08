@@ -42,6 +42,11 @@ class Genus
      */
     private  $status;
 
+    /**
+     * @ORM\Column (type="string", nullable=true)
+     */
+    private $migration;
+
     public function getName()
     {
         return $this->name;
@@ -70,6 +75,7 @@ class Genus
     {
         return $this->funFact;
     }
+
     public function setFunFact($funFact)
     {
         $this->funFact = $funFact;
@@ -90,5 +96,22 @@ class Genus
     {
         $this->status = $status;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getMigration()
+    {
+        return $this->migration;
+    }
+
+    /**
+     * @param mixed $migration
+     */
+    public function setMigration($migration)
+    {
+        $this->migration = $migration;
+    }
+
 
 }

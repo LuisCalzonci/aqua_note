@@ -1,0 +1,46 @@
+<?php
+
+
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+class Notes
+
+    /**
+     * @ORM\Entity
+     * @ORM\Table(name="notes")
+     */
+{
+
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", name="desc", nullable=true)
+     */
+    private $desc;
+
+
+    /**
+     * @ORM\Column(type="string", name="started", nullable=true)
+     */
+    private $started;
+
+    /**
+     * @ORM\Column(type="string", name="migrations", nullable=true)
+     */
+    private $migrations;
+
+    /**
+     * @ORM\Column(type="string", name="status", nullable=true)
+     */
+    private $status;
+    
+
+}

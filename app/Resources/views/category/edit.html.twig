@@ -1,14 +1,7 @@
 {% extends 'base.html.twig' %}
-{% block head %}
-    <head>
-        <meta charset="UTF-8" />
-        <title>{% block title %}edit!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
-    </head>
-{% endblock head %}
+
 {% block body %}
-    <h1>Genus edit</h1>
+    <h1>Category edit</h1>
 
     {{ form_start(edit_form) }}
         {{ form_widget(edit_form) }}
@@ -17,7 +10,7 @@
 
     <ul>
         <li>
-            <a href="{{ path('genus_index') }}">Back to the list</a>
+            <a href="{{ path('category_index') }}">Back to the list</a>
         </li>
         <li>
             {{ form_start(delete_form) }}

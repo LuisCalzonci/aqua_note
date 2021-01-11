@@ -1,5 +1,12 @@
 {% extends 'base.html.twig' %}
-
+{% block head %}
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}new!{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+{% endblock head %}
 {% block body %}
     <h1>Genus creation</h1>
 

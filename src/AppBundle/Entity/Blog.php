@@ -21,12 +21,6 @@ class Blog
      */
     private $id;
 
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="category", type="string", length=255, nullable=true)
-     */
-    private $category;
 
     /**
      * @var string
@@ -74,7 +68,7 @@ class Blog
      * @ORM\ManyToOne(targetEntity="Category", inversedBy="blogs")
      * @ORM\JoinColumn(name="category_id", referencedColumnName="id")
      */
-    private $Category;
+    private $category;
 
 
 
@@ -88,29 +82,6 @@ class Blog
         return $this->id;
     }
 
-    /**
-     * Set category
-     *
-     * @param string $category
-     *
-     * @return Blog
-     */
-    public function setCategory($category)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return string
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
 
     /**
      * Set title
@@ -254,5 +225,31 @@ class Blog
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+
+
+    /**
+     * Set category
+     *
+     * @param Category $category
+     *
+     * @return Blog
+     */
+    public function setCategory(Category $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }

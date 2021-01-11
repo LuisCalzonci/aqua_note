@@ -1,109 +1,136 @@
 <?php
 
-
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Blog;
-
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
 
-
-
+/**
+ * Blog controller.
+ *
+ * @Route("blog")
+ */
 class BlogController extends Controller
 {
-
     /**
-     * @Route("/blog/create", name="blog_create")
+     * Lists all blog entities.
+     *
+     * @Route("/", name="blog_index")
+     * @Method("GET")
      */
-    public function createAction()
+    public function indexAction()
     {
-        $blog = new Blog();
-        $blog->setCategory('122');
-        $blog->setTitle('welcome');
-        $blog->setSlug('my');
-        $blog->setContent('lorem ipsum...');
-        $blog->setCreated('Y-m-d H:i:s');
-        $blog->setModified('s');
-
         $em = $this->getDoctrine()->getManager();
 
-        // Indicamos que queremos guardar este registro.
-        $em->persist($blog);
+        $blogs = $em->getRepository('AppBundle:Blog')->findAll();
 
-        // Ejecuta las querys de las operaciones indicadas.
-        $em->flush();
-
-        return new Response('Saved new $blog entry with id '.$blog->getId());
-    }
-
-
-
-    /**
-     * @Route("/blog/{page}", name="blog_list", requirements={"page": "\d+"})
-     */
-    public function listAction($page=1)
-    {
-        return new Response(
-            '<html><body>Showing page number: '.$page.'</body></html>'
-        );
+        return $this->render('blog/index.html.twig', array(
+            'blogs' => $blogs,
+        ));
     }
 
     /**
-     * @Route("/read/{slug}", name="blog_read", requirements={"slug": "\S+"})
+     * Creates a new blog entity.
+     *
+     * @Route("/new", name="blog_new")
+     * @Method({"GET", "POST"})
      */
-    public function readAction($slug)
+    public function newAction(Request $request)
     {
-        $blog = $this->getDoctrine()
-            ->getRepository('AppBundle:Blog')
-            ->findOneBySlug($slug);
+        $blog = new Blog();
+        $form = $this->createForm('AppBundle\Form\BlogType', $blog);
+        $form->handleRequest($request);
 
-        if (!$blog) {
-            throw $this->createNotFoundException(
-                'No blog entry found for '.$slug
-            );
-        } else {
-            return new Response('<h1>'.$blog->getTitle().'</h1><br>'.$blog->getContent());
-        }
-    }
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($blog);
+            $em->flush();
 
-    /**
-     * @Route("/blog/update/{blogId}", name="blog_update", requirements={"blogId": "\d+"})
-     */
-    public function updateAction($blogId)
-    {
-        $em   = $this->getDoctrine()->getManager();
-        $blog = $em->getRepository('AppBundle:Blog')->find($blogId);
-
-        if (!$blog) {
-            throw $this->createNotFoundException(
-                'No post found for id '.$blogId
-            );
+            return $this->redirectToRoute('blog_show', array('id' => $blog->getId()));
         }
 
-        $blog->setTitle('Updated blog entry!');
-        $em->flush();
-
-        return $this->redirectToRoute('blog_list');
+        return $this->render('blog/new.html.twig', array(
+            'blog' => $blog,
+            'form' => $form->createView(),
+        ));
     }
-    /**
-     * @Route("/blog/delete/{blogId}", name="blog_delete", requirements={"blogId": "\d+"})
-     */
-    public function deleteAction($blogId)
-    {
-        $em   = $this->getDoctrine()->getManager();
-        $blog = $em->getRepository('AppBundle:Blog')->find($blogId);
 
-        if (!$blog) {
-            throw $this->createNotFoundException(
-                'No post found for id '.$blogId
-            );
+    /**
+     * Finds and displays a blog entity.
+     *
+     * @Route("/{id}", name="blog_show")
+     * @Method("GET")
+     */
+    public function showAction(Blog $blog)
+    {
+        $deleteForm = $this->createDeleteForm($blog);
+
+        return $this->render('blog/show.html.twig', array(
+            'blog' => $blog,
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
+
+    /**
+     * Displays a form to edit an existing blog entity.
+     *
+     * @Route("/{id}/edit", name="blog_edit")
+     * @Method({"GET", "POST"})
+     */
+    public function editAction(Request $request, Blog $blog)
+    {
+        $deleteForm = $this->createDeleteForm($blog);
+        $editForm = $this->createForm('AppBundle\Form\BlogType', $blog);
+        $editForm->handleRequest($request);
+
+        if ($editForm->isSubmitted() && $editForm->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+
+            return $this->redirectToRoute('blog_edit', array('id' => $blog->getId()));
         }
 
-        $em->remove($blog);
-        $em->flush();
+        return $this->render('blog/edit.html.twig', array(
+            'blog' => $blog,
+            'edit_form' => $editForm->createView(),
+            'delete_form' => $deleteForm->createView(),
+        ));
+    }
 
-        return $this->redirectToRoute('blog_list');
+    /**
+     * Deletes a blog entity.
+     *
+     * @Route("/{id}", name="blog_delete")
+     * @Method("DELETE")
+     */
+    public function deleteAction(Request $request, Blog $blog)
+    {
+        $form = $this->createDeleteForm($blog);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($blog);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('blog_index');
+    }
+
+    /**
+     * Creates a form to delete a blog entity.
+     *
+     * @param Blog $blog The blog entity
+     *
+     * @return \Symfony\Component\Form\Form The form
+     */
+    private function createDeleteForm(Blog $blog)
+    {
+        return $this->createFormBuilder()
+            ->setAction($this->generateUrl('blog_delete', array('id' => $blog->getId())))
+            ->setMethod('DELETE')
+            ->getForm()
+        ;
     }
 }

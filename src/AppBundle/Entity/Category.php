@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -164,5 +165,39 @@ class Category
     public function getDeleted()
     {
         return $this->deleted;
+    }
+
+    /**
+     * Add blog
+     *
+     * @param Blog $blog
+     *
+     * @return Category
+     */
+    public function addBlog(Blog $blog)
+    {
+        $this->blogs[] = $blog;
+
+        return $this;
+    }
+
+    /**
+     * Remove blog
+     *
+     * @param Blog $blog
+     */
+    public function removeBlog(Blog $blog)
+    {
+        $this->blogs->removeElement($blog);
+    }
+
+    /**
+     * Get blogs
+     *
+     * @return Collection
+     */
+    public function getBlogs()
+    {
+        return $this->blogs;
     }
 }

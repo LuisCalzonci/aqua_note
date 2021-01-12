@@ -1,21 +1,30 @@
-{% extends 'base.html.twig' %}
+    {% extends 'base.html.twig' %}
 
-{% block body %}
-    <h1>Blog edit</h1>
+    {% block body %}
 
-    {{ form_start(edit_form) }}
-        {{ form_widget(edit_form) }}
-        <input type="submit" value="Edit" />
-    {{ form_end(edit_form) }}
+    <div  class="card container mt-3 text-dark bg-light mb-5" style="max-width: 60rem; ">
+        <div class="card-header">
+            <h1>Blog Edit</h1>
+        </div>
+        <div class="card-body">
+            <div class="col">
 
-    <ul>
-        <li>
-            <a href="{{ path('blog_index') }}">Back to the list</a>
-        </li>
-        <li>
-            {{ form_start(delete_form) }}
-                <input type="submit" value="Delete">
-            {{ form_end(delete_form) }}
-        </li>
-    </ul>
-{% endblock %}
+                    {{ form_start(edit_form) }}
+                    {{ form_widget(edit_form) }}
+
+                    {{ form_end(edit_form) }}
+                    {{ form_start(delete_form) }}
+
+
+                    {{ form_end(delete_form) }}
+
+                <div class="row">
+                    <input type="submit" type="button"   class="btn btn-success mx-1" value="Edit" />
+                    <input type="submit" value="Delete" type="button" class="btn btn-danger mx-1 "/>
+                    <a href="{{ path('blog_index') }}"  type="button"  class="btn btn-primary mx-1 ">Back to the list</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

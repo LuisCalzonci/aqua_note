@@ -38,6 +38,7 @@
                     <div class="d-grid gap-2 d-md-block">
                         <a type="button"  class="btn btn-primary" href="{{ path('blog_show', { 'id': blog.id }) }}">show</a>
                         <a type="button"  class="btn btn-info" href="{{ path('blog_edit', { 'id': blog.id }) }}">edit</a>
+                        <a type="button"  class="btn btn-danger"  href="{{ path('blog_edit', { 'id': blog.id }) }}">delete</a>
                     </div>
                 </td>
             </tr>
@@ -50,5 +51,21 @@
         </div>
     </div>
 </div>
+{#    <script>#}
+{#        function DeleteBlog(id){#}
+{#            var route = Routing.generate('deleteAction');#}
+{#            $.ajax({#}
+{#                url: "{{ path('blog_delete', {'id': blog.id}) }}",#}
+{#                type: 'DELETE',#}
+
+{#                },#}
+{#                error: function(XMLHttpRequest, textStatus, errorThrown) {#}
+{#                    console.log(textStatus);#}
+{#                    console.log(errorThrown);#}
+{#                }#}
+{#        });#}
+{#    onclick="DeleteBlog({{ blog.id }})"#}
+{#        }#}
+{#    </script>#}
 
 {% endblock %}

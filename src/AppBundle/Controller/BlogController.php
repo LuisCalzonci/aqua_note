@@ -5,7 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Blog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Blog controller.
@@ -97,11 +98,10 @@ class BlogController extends Controller
             'delete_form' => $deleteForm->createView(),
         ));
     }
-
     /**
      * Deletes a blog entity.
      *
-     * @Route("/{id}", name="blog_delete")
+     * @Route("/delete/{id}", name="blog_delete")
      * @Method("DELETE")
      */
     public function deleteAction(Request $request, Blog $blog)
@@ -117,6 +117,7 @@ class BlogController extends Controller
 
         return $this->redirectToRoute('blog_index');
     }
+
 
     /**
      * Creates a form to delete a blog entity.

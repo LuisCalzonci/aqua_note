@@ -6,6 +6,7 @@ use AppBundle\Entity\Blog;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -89,7 +90,9 @@ class BlogController extends Controller
         if ($editForm->isSubmitted() && $editForm->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('blog_edit', array('id' => $blog->getId()));
+//            return $this->redirectToRoute('blog_edit', array('id' => $blog->getId()));
+
+            return response()->json(['message' => ' Device has been deleted!']);
         }
 
         return $this->render('blog/edit.html.twig', array(
@@ -97,26 +100,81 @@ class BlogController extends Controller
             'edit_form' => $editForm->createView(),
             'delete_form' => $deleteForm->createView(),
         ));
+
     }
+//    /**
+//     * Deletes a blog entity.
+//     *
+//     * @Route("/delete/{id}", name="blog_delete")
+//     * @Method("DELETE")
+//     */
+//    public function deleteAction(Request $request, Blog $blog)
+//    {
+//        $form = $this->createDeleteForm($blog);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $em->remove($blog);
+//            $em->flush();
+//        }
+//
+//        return $this->redirectToRoute('blog_index');
+//      }
+
     /**
-     * Deletes a blog entity.
-     *
-     * @Route("/delete/{id}", name="blog_delete")
-     * @Method("DELETE")
+     * @Route("/deleted/{id}", name="blog_delete")
      */
-    public function deleteAction(Request $request, Blog $blog)
-    {
-        $form = $this->createDeleteForm($blog);
-        $form->handleRequest($request);
+      public function deleteAjaxAction($id){
+        $em = $this->getDoctrine()->getManager();
+        $blog = $em->getRepository('AppBundle:Blog')->findOneBy(array('id' =>$id));
+        dump($blog);
+        $em->remove($blog);
+        $em->flush();
+        return new JsonResponse(array('status success'));
+//          return $this->redirectToRoute('blog_index');
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($blog);
-            $em->flush();
-        }
 
-        return $this->redirectToRoute('blog_index');
-    }
+      }
+      /**
+       * @Route ("/getBlogs/", name="blog_get")
+       */
+      public function GetBlogsAction(){
+          $em = $this->getDoctrine()->getManager();
+          $blogs = $em->getRepository('AppBundle:Blog')->findOneBy(array('id'=> id));
+          $response = new JsonResponse();
+          $response->setData( [
+              'id'     => $blogs->getId(),
+              'title' => $blogs->getTitle(),
+              'slug'   => $blogs->getSlug(),
+              'content'    => $blogs->getContent(),
+              'created'    => $blogs->getCreated(),
+              'modified'    => $blogs->getModified(),
+              'deleted'    => $blogs->getDeleted(),
+          ] );
+          return $response;
+      }
+
+//    /**
+//     * @Route("/blog/delete/{id}", name="blog_delete_ajax", requirements={"id": "\d+"})
+//     */
+//    public function deleteActionAjax(Request $request, Blog $blog)
+//    {
+//        $form = $this->createDeleteForm($blog);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $em = $this->getDoctrine()->getManager();
+//            $em->remove($blog);
+//            $em->flush();
+//        }
+//
+//
+//        return $this->redirectToRoute('blog_index');
+//    }
+
+
+
 
 
     /**
